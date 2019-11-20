@@ -1,0 +1,23 @@
+site_name: HandsOn-INFN-2019
+theme:
+  name: material
+  logo:
+    icon: cloud_circle
+  palette:
+    primary: 'Blue'
+    accent: 'Red'
+nav:
+- Home: 'README.md'
+- Kubernetes mini tutorial:
+  - Overview: k8s/overview.md
+  - Pods: k8s/pods.md
+  - Services: k8s/services.md
+- HTCondor on demand:
+  - Deployment: htcondor/orchent.md
+  - Configuration: htcondor/configuration.md
+- Extras:
+  - Ansible deployment of a webserver: extras/ansible.md
+  - PaaS Orchestrator: extras/orchent.md
+repo_url: 'https://github.com/DODAS-TS/HandsOn-INFN-2019'
+markdown_extensions: [codehilite]
+
