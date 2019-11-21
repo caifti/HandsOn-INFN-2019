@@ -52,8 +52,8 @@ If so, you are ready to start.
     - [Pods](k8s/pods.md)
     - [Services](k8s/services.md)
 - HTCondor on demand:
-    - [Deployment](htcondor/orchent.md)
-    - [Configuration](htcondor/configuration.md)
+    - [Deployment](htcondor/configuration.md)
+    - [Templating](htcondor/orchent.md)
 
 ## EXTRAS
 
