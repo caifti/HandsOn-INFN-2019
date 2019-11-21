@@ -1,11 +1,50 @@
 ---
-- hosts: vms
+- hosts: vm1
   remote_user: centos
   tasks:
     #- name: galaxy k8s users install
     #  command: ansible-galaxy install cloud-pg.ansible_role_k8s_users
     #- name: galaxy condor install
     #  command: ansible-galaxy install cloud-pg.ansible_role_condor_client
+    - name: install
+      yum:
+        name: https://github.com/indigo-dc/oidc-agent/releases/download/v3.2.7/oidc-agent-3.2.7-1.el7.x86_64.rpm
+        state: present
+    - name: install git 
+      yum:
+        name: git 
+        state: present
+    - name: get and unzip dodas client
+      block:
+        - name: unzip
+          unarchive:
+            src: https://github.com/Cloud-PG/dodas-go-client/releases/download/v0.2.2/dodas.zip
+            dest: /usr/bin/
+            remote_src: yes
+        - name: permissions
+          command: chmod 777 /usr/bin/dodas
+      tags:
+        - dodas_client
+    - name: get dodas configuration
+      copy:
+        content: |
+          cloud:
+            id: os
+            type: OpenStack
+            host: https://cloud.recas.ba.infn.it:5000/v3
+            username: indigo-dc
+            password: user_token
+            tenant: oidc
+            service_region: recas-cloud
+            auth_version: 3.x_oidc_access_token
+          im:
+            id: im
+            type: InfrastructureManager
+            host: https://im-dodas.cloud.cnaf.infn.it/infrastructures
+            token: user_token
+        dest: /home/centos/.dodas-template.yaml
+      tags:
+        - dodas_client
     - name: install kubectl
       get_url: 
         url: https://storage.googleapis.com/kubernetes-release/release/v1.14.2/bin/linux/amd64/kubectl
@@ -21,22 +60,25 @@
     - name: install condor client
       include_role: 
         name: cloud-pg.ansible_role_condor_client
+        #v2.0.0-dodas-rc7
       vars:
         iam:
           client_id: "dodas-demo"
           client_secret: "dodas-demo"
         tts:
-          client_id: "99f7152a-0550-4be6-8c55-8f27dcbe67e0"
-          client_secret: "AIEx7S3vAiIKhinEPndgnEw61GHxMC0k-_4wiVXpLOhLokr97-wNK5PEgMZOpqfO6UkKVARyBb2lQ8i4Qdv_38o"
+          client_id: "CHANGEME"
+          client_secret: "CHANGEME"
         admin:
           DN: "admin.DN"
         condor:
           host: "condor.host"
           schedd_name: "schedd_name"
+      tags:
+        - condor_client
     - name: install k8s client
       include_role: 
-        #name:  /home/dciangot/git/ansible-role-k8s_users
-        name: cloud-pg.ansible_role_k8s_users
+        name:  /home/dciangot/git/ansible-role-k8s_users
+        #name: cloud-pg.ansible_role_k8s_users
       vars:
         users:
           path: "/home/centos/"
@@ -44,14 +86,14 @@
           name: user01
         kube_admin:
           cluster: kubernetes
-          cluster_url: https://193.204.89.106:6443
-          ca_oneline: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUN5RENDQWJDZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRFNU1URXhPREU0TXpBd05sb1hEVEk1TVRFeE5URTRNekF3Tmxvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTVRBCnBFK2lrUFJYVHljeFpBbUNZSTZhYUtXMFZhQ1VVL3Ntb2JqUndVZXNCeW03VWFiRlVaOE1ENEdjcTBrSVpzdG0KUEFQa2JhZ0plZ2VXSWxyQUhTWk4zbDIvK3BuM05nRVlFd1U1R2VSU3U3UUtHdnB0N2lIcjJ4cDYyMXpGL2NoaApMR1VMU2ZCU3QyOFlDR2RFRG9VdXFvbng2ZGJ3ejM2MUlHSEhlbU8zZmdJb2ovSjlFV1p4RUVkUXJMcnIwWng0CnVJWlVESSszQmtKcCsrYnZBZnZURVdXNHYzVUpHVjZoOVM0dWpXOGdKcXVKSVI2dUs1UUxjWS85Yzl6UEIzL2QKL0FIVDcvdGhXSnc1dnZuLytWWTNlZ2R2Qms1NFVMaW1waGhGMmI3VnhKSzVzSEkxTUxydUE4SVBFVWtDVU9SeAorWDdtelBVb0w1VlBHK2ZiMVQ4Q0F3RUFBYU1qTUNFd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFKMkFva0R4dWNsTGdyYi9STTQzVFd6bWpHWHMKNXBwV0FHSURoZjZPdmxMNjdIeWUyM0hLNW1yd05id1ZDZENlQ3M3RHFDZy8xTWFyZlZRalBFOTdvWm9ockFKbwp5UDZlKzM3MWNyTFcxMm44eUw5N1hGdnBKY0xETEhJaDQzS0ozcnJSQU5mQlBoQlVHY0V2NE1ublhmWnIxMExICjJqRzVHTmtDOXJVcWlkOVAzQThpdVo3YTRRdGoxQ1Z2cmRXZ3BVeDZ6dTMzNzRHeGNuTTlDcG1XMERwbFJpcFcKVkNTVGxKR1N1Sm1NNkhZUkdFeWpheUpyeVdScDF4K28vQ0VUTVlkSldlemEvK1Z3bW9JSmVoMXlOTUphQ1d6agpnRlpHRFNubFo4K2ZLanZDeURIYkF2TzN2TTBaQU5DUUZiU1FIOXVxNVl5L0hVNVRTTWt3YVgwclo4RT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+          cluster_url: https://.106:6443
+          ca_oneline: CHANGEME 
           config: |
             apiVersion: v1
             clusters:
             - cluster:
-                certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUN5RENDQWJDZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRFNU1URXhPREU0TXpBd05sb1hEVEk1TVRFeE5URTRNekF3Tmxvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTVRBCnBFK2lrUFJYVHljeFpBbUNZSTZhYUtXMFZhQ1VVL3Ntb2JqUndVZXNCeW03VWFiRlVaOE1ENEdjcTBrSVpzdG0KUEFQa2JhZ0plZ2VXSWxyQUhTWk4zbDIvK3BuM05nRVlFd1U1R2VSU3U3UUtHdnB0N2lIcjJ4cDYyMXpGL2NoaApMR1VMU2ZCU3QyOFlDR2RFRG9VdXFvbng2ZGJ3ejM2MUlHSEhlbU8zZmdJb2ovSjlFV1p4RUVkUXJMcnIwWng0CnVJWlVESSszQmtKcCsrYnZBZnZURVdXNHYzVUpHVjZoOVM0dWpXOGdKcXVKSVI2dUs1UUxjWS85Yzl6UEIzL2QKL0FIVDcvdGhXSnc1dnZuLytWWTNlZ2R2Qms1NFVMaW1waGhGMmI3VnhKSzVzSEkxTUxydUE4SVBFVWtDVU9SeAorWDdtelBVb0w1VlBHK2ZiMVQ4Q0F3RUFBYU1qTUNFd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFKMkFva0R4dWNsTGdyYi9STTQzVFd6bWpHWHMKNXBwV0FHSURoZjZPdmxMNjdIeWUyM0hLNW1yd05id1ZDZENlQ3M3RHFDZy8xTWFyZlZRalBFOTdvWm9ockFKbwp5UDZlKzM3MWNyTFcxMm44eUw5N1hGdnBKY0xETEhJaDQzS0ozcnJSQU5mQlBoQlVHY0V2NE1ublhmWnIxMExICjJqRzVHTmtDOXJVcWlkOVAzQThpdVo3YTRRdGoxQ1Z2cmRXZ3BVeDZ6dTMzNzRHeGNuTTlDcG1XMERwbFJpcFcKVkNTVGxKR1N1Sm1NNkhZUkdFeWpheUpyeVdScDF4K28vQ0VUTVlkSldlemEvK1Z3bW9JSmVoMXlOTUphQ1d6agpnRlpHRFNubFo4K2ZLanZDeURIYkF2TzN2TTBaQU5DUUZiU1FIOXVxNVl5L0hVNVRTTWt3YVgwclo4RT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
-                server: https://193.204.89.106:6443
+                certificate-authority-data: CHANGEME 
+                server: https://.106:6443
               name: kubernetes
             contexts:
             - context:
@@ -64,51 +106,11 @@
             users:
             - name: kubernetes-admin
               user:
-                client-certificate-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM4akNDQWRxZ0F3SUJBZ0lJUGQ0SENvVEpyVEl3RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB4T1RFeE1UZ3hPRE13TURaYUZ3MHlNREV4TVRjeE9ETXdNVEphTURReApGekFWQmdOVkJBb1REbk41YzNSbGJUcHRZWE4wWlhKek1Sa3dGd1lEVlFRREV4QnJkV0psY201bGRHVnpMV0ZrCmJXbHVNSUlCSWpBTkJna3Foa2lHOXcwQkFRRUZBQU9DQVE4QU1JSUJDZ0tDQVFFQW9PUXJ5M1BYZktUemw0WkkKd2R3bllkSGV0aE9Tdm90enBaVDhLVWFscWlBWlI5Unp3eEdORVRndGFvOWxnWHF1MlZFVUZaK3Fqc2J2ZDg2Rwp1RFUzR1lFZk4zeTZ4M3h0T1RtYVBEQkxtNFNEQ0V5amhaQnlDUnJIWjFIYzIzbXlBSVJzbzdZY3JyZkptS3pLCm45WVovKzdmTm5VSFFIZm9WNExRcGwrQjZzWXpoNHNGN1lXSnFVbk45RjF1NFpJTUhscjY3L0h4bkFmOXdHNTIKdFpKVmJKTzlGa3UvWFpzU3l5TkEvQk40eU1ITlQrSEt3U0VxVXpKdmxFZU02R2xBMWV2a1JmU0ZmREtna0hRego3SkRoWUF6dnp0NmxTQUd0ZTYvTUQwS1RpR3ppdk1JQ25kNXp0K3Zja3hCYmlFbDErVmNJOXZMLzV5VUJuVkN2CkhGOU14d0lEQVFBQm95Y3dKVEFPQmdOVkhROEJBZjhFQkFNQ0JhQXdFd1lEVlIwbEJBd3dDZ1lJS3dZQkJRVUgKQXdJd0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFBNUJJdXNvUHlPNUZuSUlNVWhjVEtrNVZ4MnJEWTg2WmhFMApZUzFPeER4bFJWRnJsNStKeDROeXdDbEVlT2JPaTlSekE4NW5zTGRHbGNzMjhuaDZLaUgya0VlL3NDeGx1MmpqClV1M1lQclRocERPVGc0VzczY2hnWHJEUEZhVEZ3c0FlRnVxRXFKaW1JVys4ckx0ZWo4TWUveEE4TjBaUUZydkwKYzN4SUVhcUFuUVRDcURtdFdaYzBhb3cyRmVZWFNwdkFmc2lqbnVYTjNBUDNad1dSTXVVQk5CN0JGYTJVSzBkVApsd2JIVDFLN3NHbHdxaS9uZ1ZHUGxSNDBWaGhSM2VUWStDZ05iRXB2QStEUkNIN0R2T0dRZGFlSDJKNTBUQ1NSCjh4UW9Nd2dXNkEvY045MFMxTEM2NEp1NUJjSkt3ZERKWGFvaThGS2FlVjhWK1UyN1NRZz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
-                client-key-data: LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFb3dJQkFBS0NBUUVBb09RcnkzUFhmS1R6bDRaSXdkd25ZZEhldGhPU3ZvdHpwWlQ4S1VhbHFpQVpSOVJ6Cnd4R05FVGd0YW85bGdYcXUyVkVVRlorcWpzYnZkODZHdURVM0dZRWZOM3k2eDN4dE9UbWFQREJMbTRTRENFeWoKaFpCeUNSckhaMUhjMjNteUFJUnNvN1ljcnJmSm1LektuOVlaLys3Zk5uVUhRSGZvVjRMUXBsK0I2c1l6aDRzRgo3WVdKcVVuTjlGMXU0WklNSGxyNjcvSHhuQWY5d0c1MnRaSlZiSk85Rmt1L1hac1N5eU5BL0JONHlNSE5UK0hLCndTRXFVekp2bEVlTTZHbEExZXZrUmZTRmZES2drSFF6N0pEaFlBenZ6dDZsU0FHdGU2L01EMEtUaUd6aXZNSUMKbmQ1enQrdmNreEJiaUVsMStWY0k5dkwvNXlVQm5WQ3ZIRjlNeHdJREFRQUJBb0lCQUVpVXhvRUE0RnhWbWFKbwpyTmZ2dGtCMXlnKy9vcnFjOUczbFdTQlJ3NWlNNUhxNENBVWZITkdBMDFRNEhtV2I3OWNQc1l6VHU4Q3ZWQVpyClAvRkg2SFIwQUo0cWdhUk9xSU5oVGdnTERZQzU5ZGEvcENFeitZM0w2OXJiWGxRUWdWR2thOUlxN0tPUk83dkoKYjV0Tm5lc01XdHdaVFUwekNyaTN4ZUxZUVNha3ppczBwNGQ4anAzSUh1a0pkUVBPTDNyZm5kNCs0WUp4WlNFNgpUN0N0ODAzSHh2VE84Z1BBRXBZejg3NHUwZGliRkdlSmVhRjg1RTVJcmZWSWMxQ1NXSHFSUFZMK1dOanpUV3QvClpKYkQyT3c4ODNIOUNKcW5TSDAyb2tUWG5TN2JhUmw1cGNFSWVzRlk0cG45VXJGdUtuQWFzRzJNM2Q5R0lWOXIKS3JyVjBwRUNnWUVBekFTaUt0aVFJWTdWcFgyQ09hQmFNYXd3OVRuY053Z0RSRTBvNkJwUU5MZEpheGxWaGxQLwpYbENWVlQvU1pWVE5ic3QrVDNHUVFtNDF0MStLRENGYWJ3Z1hLSEpwNmJuT3pTeGZPU2tqSEVGK0R1VmdZdUI2CnN5WGd3U1hHc3lWditCTXBQcHNtRTBEV0RQdHE3ekIxVnRJZk9BZjVLc0dPVEhWU2Z6UTVyNWtDZ1lFQXllS0gKL2JtUU5aZldNbGU3cWNyZDVNYUczN0Q0T3Vpa2dIeWFKN1JQeEFJcHlFNkhoVDBHSU9LM1UvN3dxU0IxSXF1VQphNVlxaENzbWVIb1lLa0g5dFlyTDIvbUtHNHRzQ2pIY3JiLzRXWHJoV1RwVUU2cWJ6MWJxZ1NMcElCN2pxdThmCkF0Vm4vNG9DQ3dsbURUT01rTmVRVndwUE9ROTl2MFBhUUdCQ0cxOENnWUI5Q2FIeUxJUTViUGNYMUJKS0N6TDgKR3BKdTJTVlVQUDd6ajI2d3dkL0NUMHNaN283eUl1engrdVZyT0JCVXRtS3BzdUlaQW5ydG0rb2tGdFBlbDFwNwpqalBUUUR3VldTR2JzY1F5bmptOGlZOGV4Z29LejVXajBtVXJPMkhLVGZtUHl2Nk9OanhodEd6N3krTS84UzBaCkp2S25Qb3ZCWHBzOTFQSFlzRU5pa1FLQmdRQ3hDYTFWeStkeGlBQTNUNFpySkZLbjc0eVJGMERuYitIcUp0cU0KWE92aUtEOTV2NXZLTkxSdUhFTEdMdmZlYUc4d0F5VDVuOHNTOGtBZlFIcDJmRDQvZUVMRFdiWko1MTdNSmVPdQpubnpzQXYwZzRTeWZ2bW82VGE4QnBacW9KMDVoTkthT05wU25tOStrekE0cEgzNXgrZ2RDdlBDeVNpcHNrdFVPCnhSclRvd0tCZ0RDY1U1MlJkMThpSy9ZZGgyNlg5WURQN3k3ekZ4c3YrYmFsYk9wQTE3Z2VoVUpvK1ZRUDFCazUKalhkOW50QWNZdlNWT3hYSTMyOW53RytJeW1pZWVDazU0SDUybnBZdnkxNjBESEpxNGc2K0J0d3BLKzVvQWVITQpWSWl2RGJkZkJ6WU40K1N4RmVvSEhhTFZpK2dsRmtmMlA1VTFhQUZnN2dZZWdac1RRWjV4Ci0tLS0tRU5EIFJTQSBQUklWQVRFIEtFWS0tLS0tCg==
+                client-certificate-data: CHANGEME 
+                client-key-data: CHANGEME 
           ca_cert_file: | 
             -----BEGIN CERTIFICATE-----
-            MIICyDCCAbCgAwIBAgIBADANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDEwprdWJl
-            cm5ldGVzMB4XDTE5MTExODE4MzAwNloXDTI5MTExNTE4MzAwNlowFTETMBEGA1UE
-            AxMKa3ViZXJuZXRlczCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMTA
-            pE+ikPRXTycxZAmCYI6aaKW0VaCUU/smobjRwUesBym7UabFUZ8MD4Gcq0kIZstm
-            PAPkbagJegeWIlrAHSZN3l2/+pn3NgEYEwU5GeRSu7QKGvpt7iHr2xp621zF/chh
-            LGULSfBSt28YCGdEDoUuqonx6dbwz361IGHHemO3fgIoj/J9EWZxEEdQrLrr0Zx4
-            uIZUDI+3BkJp++bvAfvTEWW4v3UJGV6h9S4ujW8gJquJIR6uK5QLcY/9c9zPB3/d
-            /AHT7/thWJw5vvn/+VY3egdvBk54ULimphhF2b7VxJK5sHI1MLruA8IPEUkCUORx
-            +X7mzPUoL5VPG+fb1T8CAwEAAaMjMCEwDgYDVR0PAQH/BAQDAgKkMA8GA1UdEwEB
-            /wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAJ2AokDxuclLgrb/RM43TWzmjGXs
-            5ppWAGIDhf6OvlL67Hye23HK5mrwNbwVCdCeCs7DqCg/1MarfVQjPE97oZohrAJo
-            yP6e+371crLW12n8yL97XFvpJcLDLHIh43KJ3rrRANfBPhBUGcEv4MnnXfZr10LH
-            2jG5GNkC9rUqid9P3A8iuZ7a4Qtj1CVvrdWgpUx6zu3374GxcnM9CpmW0DplRipW
-            VCSTlJGSuJmM6HYRGEyjayJryWRp1x+o/CETMYdJWeza/+VwmoIJeh1yNMJaCWzj
-            gFZGDSnlZ8+fKjvCyDHbAvO3vM0ZANCQFbSQH9uq5Yy/HU5TSMkwaX0rZ8E=
             -----END CERTIFICATE-----
           ca_cert_key: |
             -----BEGIN RSA PRIVATE KEY-----
-            MIIEpAIBAAKCAQEAxMCkT6KQ9FdPJzFkCYJgjppopbRVoJRT+yahuNHBR6wHKbtR
-            psVRnwwPgZyrSQhmy2Y8A+RtqAl6B5YiWsAdJk3eXb/6mfc2ARgTBTkZ5FK7tAoa
-            +m3uIevbGnrbXMX9yGEsZQtJ8FK3bxgIZ0QOhS6qifHp1vDPfrUgYcd6Y7d+AiiP
-            8n0RZnEQR1CsuuvRnHi4hlQMj7cGQmn75u8B+9MRZbi/dQkZXqH1Li6NbyAmq4kh
-            Hq4rlAtxj/1z3M8Hf938AdPv+2FYnDm++f/5Vjd6B28GTnhQuKamGEXZvtXEkrmw
-            cjUwuu4Dwg8RSQJQ5HH5fubM9SgvlU8b59vVPwIDAQABAoIBAQCqjXthdMBGrnB0
-            vwHCpHvi4cKY8YvQWQO7kC9cMKdk46CJ8lDDSgSI5EGEzzRDaL8Czip0DU1o/l4D
-            uYcqN6KNE68QgVxQntT3edDzFB53p6gCV0gvkZ99VCBoAdupvg9R5bpAFNsRMgLE
-            kIaoTXxwwpUeYs+bfL/BTG03lV1olZ1rVvIZdlAiegQj18S4qCstppQcv6/Shic1
-            rRtDteSLPdTZp5O9B3pHBYhMcxEQt5O+La/lsxwImNY6mOpAVdLfa+f/Duzfomo9
-            ueI8R+hU6YdhAIndK6HX0NNqMK4+xHx1hIIzOzlFEuYstq69zJ9LhF9TO3vk2rOy
-            B4xZiUghAoGBAPrQX/DClslpkmIeFLtddYRaZpa0uOGMRAWaXntg11h4hNFMqYpO
-            i0eMBuUrwyENS/yNJy9O+R1j0EUTSFLCCWjY+dNBG/qdqSTU/1yB1IvIhVu/XdyO
-            dMxuAQOwXBUXVczBQ0WS9cTOrPGwUm8ltgDII8SQMViT8PrCxsSFT6Y3AoGBAMjS
-            Gvi3JfKCerzqSEKn6Qy2HemaEm/U+xxKHYE5HIlqD1oMFFj0S5+FjLoKEKki6N05
-            o5LAEzXPBLdvdDn7gdu7pwxOFaArHhkeXo1OGUGIY1a3Iy8mXKeh0BiClvfpLf5s
-            oqk9XiuCW0hFrleMXBIj12jD3mb+ol8YwulvxUU5AoGAevecggq1KMx0s1wyJ+Zb
-            TmeP8oVqO1Ksqt6TQgQpsDtuSrs+SAvYJ1zUqJj7EwJU5d5CfuRGKI2eN6+Lft+Z
-            A2mVmmhKkmWn3uH6zNzuWxYVo/S/zPme8/de0fMuQjztmPSLydmSW0pE6j3bPJkN
-            kXaOarmTJ+1ocVj7YLBHa6MCgYBZQ6M/iNFyUXNTQ+Ro1JAv2UfEjXrCgO45rewd
-            g5BeuGkogpQM0lJHDyr1iwHK3LybkUJXOc+QLHwROZZ1K4mWbXwcaR0Nu/y995TZ
-            xKxPR9u4MOGP1MJ8tN119545hkmufQV0qtWQC3qdznNncPmACrR2WhIiv+7WzH/f
-            GZKbaQKBgQDtAnlicB3acAXXayaAzpowI0NdrIv0bUi5k+OgOrlkr04JAKOOybGm
-            hL/aD07j6c8HTZy0QPCI/W5Dn5RGlDfX9LSQKzg3dyWnPZV1fXhVcS94ugxuLjTS
-            RBAek39lGPEgLvqESITUiVOrm84fXY5grI+VwR/Fr15qyUR77+Ufiw==
             -----END RSA PRIVATE KEY-----

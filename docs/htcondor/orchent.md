@@ -1,14 +1,26 @@
 
 # Deploying HTCondor on demand 
 
-### Retrieve IAM token
+## Templating an HTCondor k8s cluster: Helm
 
-``` bash
-git clone https://github.com/DODAS-TS/HandsOn-INFN-2019
-cd HandsOn-INFN-2019
-source ./scripts/get_orchent_token.sh
-```
+### Folder tree
 
-You'll be prompted with username and password requests. Just insert the one corresponding to you Indigo-IAM account.
+### Values
 
-## Automation
+### Templates
+
+#### pods
+
+
+#### services
+
+
+#### volumes
+
+
+
+## Test the deployment
+
+
+
+## EXTRA: try helm standalone
