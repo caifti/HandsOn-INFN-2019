@@ -1,4 +1,3 @@
-### [◀](../README.md)
 
 # Introduction to cloud platforms
 

@@ -1,4 +1,3 @@
-### [◀](../README.md)
 
 # Deploying HTCondor on demand 
 

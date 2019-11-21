@@ -1,4 +1,3 @@
-### [◀](../README.md)
 
 Before starting download the hands-on repository and move inside the directory as follow:
 

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: configuredpod
+spec:
+  containers:
+  - name: <my configured name>
+    image: <your container image name>
+    ports:
+    - containerPort: 9876
+    resources:
+      limits:
+        memory: "64Mi"
+        cpu: "500m"
