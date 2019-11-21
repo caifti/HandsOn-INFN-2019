@@ -24,7 +24,22 @@ You'll be prompted with username and password requests. Just insert the one corr
 
 [Template for HTC cluster on demand with orchestrator](https://gist.githubusercontent.com/dciangot/cf43757f23fa33742cd7c0704152ab34/raw/032524775ef72db5ec1068ed01351293b1b534ef/condor_orchestrator.yaml)
 
+#### Fill the missing parameters
 
+....
+
+#### Deploy
+
+After using the `$HOME/get_proxy.sh` script to retrieve the token, export it into an env variable together with the orchestrator endpoint:
+
+```bash
+export ORCHENT_TOKEN=<your token here>
+export ORCHENT_URL=https://dodas-paas.cloud.ba.infn.it/orchestrator
+```
+
+```bash
+orchent depcreate condor_orchestrator.yaml '{}'
+```
 
 ### Method 2: Deployment with IM DODAS
 
