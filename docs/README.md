@@ -10,6 +10,7 @@ Diego Ciangottini (diego.ciangottini<at\>pg.infn.it)
 
 - [Kubernetes official tutorial](https://kubernetes.io/docs/tutorials)
 - [Kubernetes by examples](http://kubernetesbyexample.com/)
+- [Infrastructures for Big Data Processing (BDP2)]() - Davide Salomoni
 
 ## Before starting
 
@@ -51,9 +52,11 @@ If so, you are ready to start.
     - [Overview](k8s/overview.md)
     - [Pods](k8s/pods.md)
     - [Services](k8s/services.md)
+    - [Debugging](k8s/debugging.md)
+    - [Volumes](k8s/volumes.md)
 - HTCondor on demand:
-    - [Deployment](htcondor/configuration.md)
-    - [Templating](htcondor/orchent.md)
+    - [Deployment](htcondor/deployment.md)
+    - [Templating](htcondor/templating.md)
 
 ## EXTRAS
 

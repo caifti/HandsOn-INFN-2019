@@ -55,6 +55,8 @@ orchent depcreate condor_orchestrator.yaml '{}'
 
 ....
 
+#### Validate the template
+
 #### Deploy
 
 After using the `$HOME/get_proxy.sh` script to retrieve the token and to configure the dodas client:

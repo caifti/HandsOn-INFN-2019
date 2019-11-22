@@ -2,6 +2,8 @@
 
 ## From container to pods
 
+![Kubernete pods schema](img/k8s_deployment.png)
+
 Let's see how we can deploy a simple container using kubernetes. 
 To do this we need to introduce 2 k8s resources:
 
@@ -114,3 +116,5 @@ kubectl delete pod <pod name>
 ```
 
 __Hint__: remember that also a deployment has been created
+
+[TODO: ESEMPIO RESTART E PERDITA DATI]

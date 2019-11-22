@@ -12,9 +12,11 @@ nav:
   - Overview: k8s/overview.md
   - Pods: k8s/pods.md
   - Services: k8s/services.md
+  - Debugging: k8s/debugging.md
+  - Volumes: k8s/volumes.md
 - HTCondor on demand:
-  - Deployment: htcondor/configuration.md
-  - Templating: htcondor/orchent.md
+  - Deployment: htcondor/deployment.md
+  - Templating: htcondor/templating.md
 - Extras:
   - Ansible deployment of a webserver: extras/ansible.md
   - PaaS Orchestrator: extras/orchent.md
