@@ -20,7 +20,7 @@ A Kubernetes volume is essentially a directory accessible to all containers runn
 - file-sharing types such as `nfs`
 - cloud provider-specific types like `awsElasticBlockStore`, `azureDisk`, or `gcePersistentDisk`
 - distributed file system types, for example `glusterfs` or `cephfs`
-special-purpose types like secret, `gitRepo`
+special-purpose types like `secret`, `gitRepo`
 - a special type of volume called `PersistentVolume`, see [HERE]
 
 ### Create a node-local volume with emptyDir

@@ -10,6 +10,7 @@ Diego Ciangottini (diego.ciangottini<at\>pg.infn.it)
 
 - [Kubernetes official tutorial](https://kubernetes.io/docs/tutorials)
 - [Kubernetes by examples](http://kubernetesbyexample.com/)
+- [Helm documentation](https://helm.sh/docs/topics/charts/)
 - [Infrastructures for Big Data Processing (BDP2)]() - Davide Salomoni
 
 ## Before starting

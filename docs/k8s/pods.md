@@ -46,7 +46,7 @@ kubectl describe pod <your pod name>-3210265840-k705b | grep IP:
 IP:                     172.17.0.3
 ```
 
-#### Using configuration files
+#### Using manifest files
 
 Any resource can also be created from a yaml or json template. 
 In case of a pod you can find the configuration file in `templates/pods.yml`:
@@ -70,7 +70,7 @@ spec:
 
 As you can see, is also possible to set limits for the resource to be reserved for the pod. 
 
-Now the syntax for creating a resource from a file is:
+Now the syntax for creating a resource from  a manifest file is:
 
 ```bash
 kubectl create -f templates/pods.yml
