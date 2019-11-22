@@ -6,7 +6,7 @@ We can create a reliable way to access the enpoint inside a pod using the `servi
     - The virtual in VIP means it is not an actual IP address connected to a network interface, but its purpose is purely to __forward traffic to one or more pods.__
     - Keeping the mapping between the VIP and the pods up-to-date is the job of __kube-proxy, a process that runs on every node,__ which queries the API server to learn about new services in the cluster.
 
-![Kubernetes service schema](img/service.png)]
+![Kubernetes service schema](img/service.png)
 
 ## Type of services
 

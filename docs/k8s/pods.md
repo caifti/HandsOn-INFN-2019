@@ -5,7 +5,7 @@
 ![Kubernete pods schema](img/k8s_deployment.png)
 
 Let's see how we can deploy a simple container using kubernetes. 
-To do this we need to introduce 2 k8s resources:
+To do this we need to introduce two k8s resources:
 
 - __Pod__:
     - A pod is a collection of containers sharing a network and mount namespace and is the basic unit of deployment in Kubernetes. All containers in a pod are scheduled on the same node. 
