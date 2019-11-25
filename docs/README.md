@@ -22,7 +22,7 @@ git clone https://github.com/DODAS-TS/HandsOn-INFN-2019.git && cd HandsOn-INFN-2
 ```
 3. set the environment variable to use the k8s config file pointing to the demo cluster
 ```bash
-export KUBECONFIG=/home/centos/user01/kubeconfig.yml
+export KUBECONFIG=/home/centos/form<your number>/kubeconfig.yml
 ```
 
 You should now be able to see the cluster nodes with:
@@ -52,8 +52,8 @@ If so, you are ready to start.
 - Kubernetes mini tutorial
     - [Overview](k8s/overview.md)
     - [Pods](k8s/pods.md)
-    - [Services](k8s/services.md)
     - [Debugging](k8s/debugging.md)
+    - [Services](k8s/services.md)
     - [Volumes](k8s/volumes.md)
 - HTCondor on demand:
     - [Deployment](htcondor/deployment.md)

@@ -11,9 +11,9 @@ nav:
 - Kubernetes mini tutorial:
   - Overview: k8s/overview.md
   - Pods: k8s/pods.md
-  - Services: k8s/services.md
   - Debugging: k8s/debugging.md
-  - Volumes: k8s/volumes.md
+  - Services: k8s/services.md
+  #- Volumes: k8s/volumes.md
 - HTCondor on demand:
   - Deployment: htcondor/deployment.md
   - Templating: htcondor/templating.md

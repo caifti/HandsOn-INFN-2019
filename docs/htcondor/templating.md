@@ -12,8 +12,6 @@ On [HelmHub](https://hub.helm.sh/) you can find by yourselves the motivation of 
 
 Helm uses a packaging format called charts. A chart is a collection of files that describe a related set of Kubernetes resources. A single chart might be used to deploy something simple, like a memcached pod, or something complex, like a full web app stack with HTTP servers, databases, caches, and so on.
 
-
-
 ### Chart folder tree
 
 Charts are created as files laid out in a particular directory tree, then they can be packaged into versioned archives to be deployed.
@@ -38,18 +36,22 @@ wordpress/
 
 ### Templates
 
-#### pods
-
-
-#### services
-
-
-#### volumes
-
+- [REF COLLECTOR]
+- [REF Schedd]
+- [REF prox retrieval]
+  - retrieval services
+- [REF worker node]
 
 
 ## Test the deployment
 
 
 
-## EXTRA: try helm standalone
+## EXTRA
+
+### try helm standalone
+
+
+### integration in ansible
+
+[REF to ansible]

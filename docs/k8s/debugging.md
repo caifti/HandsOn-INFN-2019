@@ -7,21 +7,20 @@ Logging is one option to understand what is going on inside your applications an
 
 ### Kubectl logs
 
+kubectl logs --tail=5 logme -c gen
 
+kubectl logs -f --since=10s logme -c gen
 
-## Log into a running pod
+### Edit resources
 
-...
+kubectl edit deployment ...
 
-### Kubectl exec
+## Extras
 
+### WebUI
 
-## WebUI
+#### Login and tabs
 
-### Login and tabs
+https://193.XXXXX....:60443
 
-
-### Logs
-
-### Log into pods
 

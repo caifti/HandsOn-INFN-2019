@@ -5,23 +5,13 @@
 
 ![Deployment schema](img/htcondor_dodas.png)
 
-### Kubernetes deployments
-
-#### Collector
-
-#### Schedd
-
-#### WorkerNode
-
-#### Proxy retrieval service
-
 ### AuthN/Z schema
 
 ![AuthN/Z schema](img/iam_condor_flow_corso.png)
 
 ## Automation flow
 
-![IMAGE]()
+![Automation flow](img/automation_flow.png)
 
 ## Deploying HTCondor on demand 
 
