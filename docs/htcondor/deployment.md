@@ -47,6 +47,15 @@ export ORCHENT_URL=https://dodas-paas.cloud.ba.infn.it/orchestrator
 orchent depcreate condor_orchestrator.yaml '{}'
 ```
 
+#### Log into k8s master
+
+Get the private key for the master node key:
+
+-
+
+Then log in with:
+
+
 ### Method 2: Deployment with IM DODAS
 
 #### Get the templates
@@ -71,3 +80,10 @@ After using the `$HOME/get_proxy.sh` script to retrieve the token and to configu
 dodas create htcondor_k8s-cluster.yaml
 ```
 
+#### Log into k8s master
+
+Get the private key for the master node key:
+
+-
+
+Then log in with:

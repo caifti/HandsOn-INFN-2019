@@ -17,6 +17,8 @@ nav:
 - HTCondor on demand:
   - Deployment: htcondor/deployment.md
   - Templating: htcondor/templating.md
+- FaaS hands-on:
+  - Templating: faas/faas.md
 - Extras:
   - Ansible deployment of a webserver: extras/ansible.md
   - PaaS Orchestrator: extras/orchent.md

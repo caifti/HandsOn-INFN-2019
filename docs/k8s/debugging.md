@@ -16,11 +16,19 @@ kubectl logs -f --since=10s logme -c gen
 kubectl edit deployment ...
 
 ## Extras
-
 ### WebUI
 
 #### Login and tabs
 
-https://193.XXXXX....:60443
+https://193.204.89.106:30443/#!/deployment?namespace=user01
 
+Get your token:
 
+```bash
+$ kubectl describe serviceaccount user01 | grep Tokens
+Tokens:              user01-token-2fbz
+```
+```bash
+$ kubectl describe secret user01-token-2fbz8 | grep token: 
+token:      eyJhbG.......
+```
