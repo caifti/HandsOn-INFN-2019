@@ -3,13 +3,15 @@
 Workaround for known bug Docker-XFS:
 
 ```bash
-truncate -s 500M /opt/cvmfs/spool/test
+sudo mkdir /opt/cvmfs/spool/
 
-mkfs.ext4 /opt/cvmfs/spool/test
+sudo truncate -s 500M /opt/cvmfs/spool/test
 
-mkdir -p /opt/docker/
+sudo mkfs.ext4 /opt/cvmfs/spool/test
 
-mount /opt/cvmfs/spool/test /opt/docker/
+sudo mkdir -p /opt/docker/
+
+sudo mount /opt/cvmfs/spool/test /opt/docker/
 ```
 
 Docker compose for deploying a stratum0 + client:
@@ -67,7 +69,9 @@ docker cp /var/cvmfs-docker/stratum0/etc/cvmfs/keys/myrepo.dodas.pub cvmfs-clien
 
 docker exec -ti cvmfs-client bash
 
-bash -c "/etc/cvmfs-init-scripts/client-init.sh myrepo.dodas cvmfs-stratum0"
+chmod +x /etc/cvmfs-init-scripts/client-init.sh
+
+/etc/cvmfs-init-scripts/client-init.sh myrepo.dodas cvmfs-stratum0
 
 ls /cvmfs/myrepo.dodas
 
@@ -91,6 +95,9 @@ exit
 Into the client again:
 
 ```bash
+# no need to force restart, but not to waste time waiting for periodic update....
+/etc/cvmfs-init-scripts/client-init.sh myrepo.dodas cvmfs-stratum0
+
 ls /cvmfs/myrepo.dodas/test.txt
 
 cat /cvmfs/myrepo.dodas/test.txt
