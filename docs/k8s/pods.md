@@ -68,9 +68,6 @@ spec:
       limits:
         memory: "64Mi"
         cpu: "500m"
-  - name: probe-container
-    image: ubuntu
-    command: sleep infinity
 ```
 
 As you can see, is also possible to set limits for the resource to be reserved for the pod. 
@@ -91,7 +88,7 @@ And finally remove the pod with:
 
 ```bash
 kubectl delete lookup-manifest-pod
-````
+```
 
 ### Create a deployment from configuration file
 
