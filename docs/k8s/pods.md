@@ -78,7 +78,7 @@ As you can see, is also possible to set limits for the resource to be reserved f
 Now the syntax for creating a resource from  a manifest file is:
 
 ```bash
-kubectl create -f templates/pods.yml
+kubectl create -f templates/k8s/pods.yml
 ```
 
 And then take a look to the pod details using describe command:
@@ -129,7 +129,7 @@ Here you can see the addition of the `replica` field where you can specifiy how 
 Also the `label` metadata is important to organize the application management as we will see next on the k8s `service` section.
 
 ```bash
-kubectl create -f templates/deployments.yml
+kubectl create -f templates/k8s/deployments.yml
 ```
 
 Also, let's try to see the environment variable set inside the container with the `kubectl exec`utility.

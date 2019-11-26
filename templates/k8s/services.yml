@@ -4,8 +4,7 @@ metadata:
   name: simpleservice
 spec:
   ports:
-    - port: 80
-      targetPort: 9876
-  externalIPs: 193.XXXXXXX
+    - port: 300<youID>
+      targetPort: 80
   selector:
     app: myapp

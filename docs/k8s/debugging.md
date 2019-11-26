@@ -20,15 +20,15 @@ kubectl edit deployment ...
 
 #### Login and tabs
 
-https://193.204.89.106:30443/#!/deployment?namespace=user01
+https://193.204.89.106:30443/#!/deployment?namespace=form<your ID>
 
 Get your token:
 
 ```bash
-$ kubectl describe serviceaccount user01 | grep Tokens
-Tokens:              user01-token-2fbz
+$ kubectl describe serviceaccount form<your ID> | grep Tokens
+Tokens:              form<your ID>-token-2fbz
 ```
 ```bash
-$ kubectl describe secret user01-token-2fbz8 | grep token: 
+$ kubectl describe secret form<your ID>-token-2fbz8 | grep token: 
 token:      eyJhbG.......
 ```

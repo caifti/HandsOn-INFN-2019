@@ -51,6 +51,7 @@ wordpress/
 
 ### try helm standalone
 
+helm template mychart -x templates/deployment.yaml
 
 ### integration in ansible
 

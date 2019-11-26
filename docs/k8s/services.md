@@ -101,10 +101,6 @@ kubectl exec -ti  probe-cluster-pod  curl 10.99.69.211:300<youID>
 
 ### External IPs
 
-```bash
-$ kubectl describe node vnode-0.localdomain | grep InternalIP:
-  InternalIP:  193.204.89.106
-```
 
 ```yaml
 apiVersion: v1
@@ -116,32 +112,14 @@ spec:
     - port: 300<youID>
       targetPort: 80
   externalIPs:
-    - 193.204.89.106
+    - 10.2.201.117
   selector:
     app: myapp
 ```
 
 ```bash
-curl 193.204.89.106:300<youID>
+curl 10.2.201.117:300<youID>
 ```
-
-
-### Using NodePort
-
-```yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: simpleservice
-spec:
-  ports:
-    - port: 8081
-      nodePort: 300<youID>
-      targetPort: 80
-  selector:
-    app: myapp
-```
-
 
 ### Ingress Controllers
 
