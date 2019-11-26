@@ -30,6 +30,10 @@ You'll be prompted with username and password requests. Just insert the one corr
 
 [Template for HTC cluster on demand with orchestrator](https://gist.githubusercontent.com/dciangot/cf43757f23fa33742cd7c0704152ab34/raw/032524775ef72db5ec1068ed01351293b1b534ef/condor_orchestrator.yaml)
 
+#### Quick look at ansible
+
+[HTCONDOR cluster Ansible](https://github.com/indigo-dc/ansible-role-htcondor_config/blob/v2.0.0-dodas-rc1/tasks/main.yml)
+
 #### Fill the missing parameters
 
 ....

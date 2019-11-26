@@ -12,6 +12,13 @@ To do this we need to introduce two k8s resources:
 - __Deployment__:
     - A deployment is a supervisor for pods, giving you fine-grained control over how and when a new pod version is rolled out as well as rolled back to a previous state.
 
+## Before continuing
+
+The docker images used in this demo can be found in:
+
+- [lookup](https://github.com/DODAS-TS/HandsOn-INFN-2019/tree/master/templates/flask-app)
+- [probe](https://github.com/DODAS-TS/HandsOn-INFN-2019/tree/master/templates/probe-app)
+
 
 ### Create a pod with kubectl
 
@@ -61,7 +68,7 @@ metadata:
 spec:
   containers:
   - name: lookup-container 
-    image: lookup
+    image: dciangot/lookup
     ports:
     - containerPort: 80
     resources:

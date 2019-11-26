@@ -36,11 +36,10 @@ wordpress/
 
 ### Templates
 
-- [REF COLLECTOR]
-- [REF Schedd]
-- [REF prox retrieval]
-  - retrieval services
-- [REF worker node]
+- [Master/Collector/CCB/negotiator](https://github.com/DODAS-TS/HandsOn-INFN-2019/blob/master/htc_helm/templates/master.yaml)
+- [Schedd](https://github.com/DODAS-TS/HandsOn-INFN-2019/blob/master/htc_helm/templates/schedd.yaml)
+- [TTS X509 proxy](https://github.com/DODAS-TS/HandsOn-INFN-2019/blob/master/htc_helm/templates/tts.yaml)
+- [Worker node](https://github.com/DODAS-TS/HandsOn-INFN-2019/blob/master/htc_helm/templates/wn.yaml)
 
 
 ## Test the deployment
