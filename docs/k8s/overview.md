@@ -17,6 +17,9 @@
     - The Kubernetes model is declarative. You create instructions in YAML that tell it the desired state of the cluster. It then does what it needs to do to maintain this state. 
 - Kubernetes is everywhere:
     - You can run it on bare metal servers or in a private cloud. You can run it on the public cloud. You can run applications within a hosted Kubernetes service.
+    - You can also create a local dev cluster in few steps with many solutions:
+        - [k3d](https://github.com/rancher/k3d)
+        - [minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/)
 
 ## Kubernetes architecture in  a nutshell
 
