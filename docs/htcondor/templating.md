@@ -44,14 +44,32 @@ wordpress/
 
 ## Test the deployment
 
+To get the compiled K8s manifest from HELM:
+
+```bash
+helm template mychart -x templates/deployment.yaml
+```
+
+Live HandsOn:
+
+- configure condor client 
+- condor_status -any
 
 
 ## EXTRA
 
-### try helm standalone
+If you delete the current Helm deployment:
 
-helm template mychart -x templates/deployment.yaml
+```bash
+$ helm list
+NAME  	REVISION	UPDATED                 	STATUS  	CHART                    	APP VERSION	NAMESPACE
+condor	1       	Wed Nov 27 12:26:18 2019	DEPLOYED	helm-chart_htcondor-0.1.0	1.0        	default  
+$ helm delete condor
+```
 
-### integration in ansible
 
-[REF to ansible]
+Then you can try by hand:
+
+```bash
+helm install --name mycondor helm-chart_htcondor/ --values /etc/condor_values.yml
+```
