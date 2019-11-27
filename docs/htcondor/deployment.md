@@ -55,10 +55,16 @@ orchent depcreate condor_orchestrator.yaml '{}'
 
 Get the private key for the master node key:
 
--
+```bash
+orchent depshow <UUID>
+```
 
 Then log in with:
 
+```bash
+chmod 600 mykey
+ssh -i mykey k8s_master
+```
 
 ### Method 2: Deployment with IM DODAS
 
@@ -88,6 +94,8 @@ dodas create htcondor_k8s-cluster.yaml
 
 Get the private key for the master node key:
 
--
+```bash
+dodas get vm <infID> 0
+```
 
 Then log in with:
