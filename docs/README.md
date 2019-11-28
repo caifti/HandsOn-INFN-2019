@@ -55,7 +55,6 @@ If so, you are ready to start.
     - [Pods](k8s/pods.md)
     - [Debugging](k8s/debugging.md)
     - [Services](k8s/services.md)
-    - [Volumes](k8s/volumes.md)
 - [CVMFS](htcondor/cvmfs.md)
 - HTCondor on demand:
     - [Deployment](htcondor/deployment.md)
