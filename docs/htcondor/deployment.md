@@ -90,6 +90,8 @@ After using the `$HOME/get_proxy.sh` script to retrieve the token and to configu
 dodas create htcondor_k8s-cluster.yaml
 ```
 
+__N.B.__ the client installation guide and reference can be found [here](https://cloud-pg.github.io/dodas-go-client/). 
+
 #### Log into k8s master
 
 Get the private key for the master node key:
@@ -98,4 +100,3 @@ Get the private key for the master node key:
 dodas get vm <infID> 0
 ```
 
-Then log in with:
