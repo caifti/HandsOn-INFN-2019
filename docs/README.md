@@ -60,9 +60,9 @@ If so, you are ready to start.
     - [Deployment](htcondor/deployment.md)
     - [Templating](htcondor/templating.md)
 - FaaS:
-  - [Setup FaaS framework](faas/faas.md)
-  - [Hands on FaaS triggers](faas/events.md)
-  - [Managing storage events and FaaS](faas/workflows.md)
+    - [Setup FaaS framework](faas/faas.md)
+    - [Hands on FaaS triggers](faas/events.md)
+    - [Managing storage events and FaaS](faas/workflows.md)
 
 ## EXTRAS
 

@@ -74,6 +74,13 @@ And then, log into the created machine:
 vagrant ssh
 ```
 
+Remember also to authenticate with OpenFaaS cli before continuing:
+
+```bash
+export OPENFAAS_URL=http://127.0.0.1:31112
+cat gateway-password.txt | faas-cli login --password-stdin
+```
+
 > **NOTE**: Vagrant and Virtualbox are required on the machine of course. If you don't have them
 > check the previous steps to install the packages
 
