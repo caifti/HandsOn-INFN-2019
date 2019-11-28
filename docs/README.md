@@ -60,9 +60,14 @@ If so, you are ready to start.
 - HTCondor on demand:
     - [Deployment](htcondor/deployment.md)
     - [Templating](htcondor/templating.md)
+- FaaS:
+  - [Setup FaaS framework](faas/faas.md)
+  - [Hands on FaaS triggers](faas/events.md)
+  - [Managing storage events and FaaS](faas/workflows.md)
 
 ## EXTRAS
 
+- [k3s - Deploy kubernetes cluster in 1 min for development](faas/k3s.md)
 - [Ansible deployment of a webserver](extras/ansible.md)
 - [PaaS Orchestrator](extras/orchent.md)
 

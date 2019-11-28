@@ -46,7 +46,7 @@ If you have [Homebrew](https://brew.sh/) installed just type this in the command
 brew cask install vagrant
 ```
 
-## Install SOSC2019 Vagrant project
+## Install Vagrant project
 
 To be operative with the current project you have to download with [git](https://git-scm.com/downloads) or
 extract the [zip file](https://github.com/Cloud-PG/SOSC2019/archive/master.zip).
